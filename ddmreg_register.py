@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--modelDir', default='', help='Folder that contains the DDMReg CNN models.')
 parser.add_argument('--movingDir', default='', help='Folder that contains the moving FA and TOM data.')
 parser.add_argument('--targetDir', default='', help='Folder that contains the target FA and TOM data.')
-parser.add_argument('--outpuDir', default='', help='Folder that contains the target FA and TOM data.')
+parser.add_argument('--outpuDir', default='', help='Output folder.')
 
 # Device
 parser.add_argument('--gpu', default='0', help='GPU ID number (default: 0)')
@@ -26,10 +26,10 @@ parser.add_argument('--gpu', default='0', help='GPU ID number (default: 0)')
 args = parser.parse_args()
 
 # Testing only
-args.modelDir  = '../DDMReg/ddmreg_models/'
-args.movingDir = '../DDMReg/test/sub_1/'
-args.targetDir = '../DDMReg/test/sub_2/'
-args.outpuDir  = '../DDMReg/test/sub_1-TO-sub_2'
+# args.modelDir  = '../DDMReg/ddmreg_models/'
+# args.movingDir = '../DDMReg/test/sub_1/'
+# args.targetDir = '../DDMReg/test/sub_2/'
+# args.outpuDir  = '../DDMReg/test/sub_1-TO-sub_2'
 
 os.makedirs(args.outpuDir, exist_ok=True)
 
@@ -81,7 +81,9 @@ dicem_orig, dicem_pred = compute_dice(tensor_vols, pred, dice_eval)
 view_prediction(tensor_vols, pred, SliceID=64, segID=4, show=True, save=True, 
                 visdir=args.outpuDir, filename='ddmreg_prediction.png')
 
-dice_info = 'Dice: \n%s \n-> \n%s' % (str(dicem_orig), str(dicem_pred))
+dice_info = 'Dice per tract: \n%s \n-> \n%s' % (str(dicem_orig), str(dicem_pred))
+print(dice_info)
+dice_info = 'Mean Dice: %s -> %s' % (str(dicem_orig.mean()), str(dicem_pred.mean()))
 print(dice_info)
 
 # Output
